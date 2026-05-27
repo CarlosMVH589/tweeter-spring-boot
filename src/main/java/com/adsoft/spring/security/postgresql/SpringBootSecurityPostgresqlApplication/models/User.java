@@ -94,13 +94,13 @@ public class User {
 
 
   @OneToMany(mappedBy = "user")
-  Set<TweetReaction> likes;
+  Set<InstrumentoReaction> likes;
 
-  public Set<TweetReaction> getLikes() {
+  public Set<InstrumentoReaction> getLikes() {
     return likes;
   }
 
-  public void setLikes(Set<TweetReaction> likes) {
+  public void setLikes(Set<InstrumentoReaction> likes) {
     this.likes = likes;
   }
 

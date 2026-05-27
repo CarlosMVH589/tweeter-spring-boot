@@ -2,15 +2,15 @@ package com.adsoft.spring.security.postgresql.SpringBootSecurityPostgresqlApplic
 import jakarta.persistence.*;
 
 @Entity
-@Table( name = "tweet_reactions",
+@Table( name = "instrumento_reactions",
           uniqueConstraints = { 
-          @UniqueConstraint(columnNames = {"user_id", "tweet_id"}
+          @UniqueConstraint(columnNames = {"user_id", "instrumento_id"}
           ),
       
         }
 )
 
-public class TweetReaction {
+public class InstrumentoReaction {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,15 +38,15 @@ public class TweetReaction {
     this.userId = userId;
    }
 
-    @Column(name = "tweet_id")
-    Long tweetId;
+    @Column(name = "instrumento_id")
+    Long instrumentoId;
 
-  public Long getTweetId() {
-        return tweetId;
+  public Long getInstrumentoId() {
+        return instrumentoId;
     }
 
-    public void setTweetId(Long tweetId) {
-        this.tweetId = tweetId;
+    public void setInstrumentoId(Long instrumentoId) {
+        this.instrumentoId = instrumentoId;
     }
 
   public Long getId() {
@@ -73,17 +73,17 @@ public class TweetReaction {
     }
 
     @ManyToOne
-    @MapsId("tweetId")
-    @JoinColumn(name = "tweet_id")
-    Tweet tweet;
+    @MapsId("instrumentoId")
+    @JoinColumn(name = "instrumento_id")
+    Instrumento instrumento;
 
-    public Tweet getTweet() {
-        return tweet;
+    public Instrumento getInstrumento() {
+        return instrumento;
     }
 
-    public void setTweet(Tweet tweet) {
-        this.tweetId = tweet.getId();
-        this.tweet = tweet;
+    public void setInstrumento(Instrumento instrumento) {
+        this.instrumentoId = instrumento.getId();
+        this.instrumento = instrumento;
     }
 
     @ManyToOne
