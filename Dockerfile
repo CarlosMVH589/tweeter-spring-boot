@@ -1,13 +1,10 @@
-FROM openjdk:22-rc-oracle
+# Etapa 1: Compilar la aplicación usando Maven y Java 17
+FROM maven:3.8.5-openjdk-17 AS build
+COPY . .
+RUN mvn clean package -DskipTests
 
-LABEL maintainer="adsoft@live.com.mx"
-
-VOLUME /tmp
-
+# Etapa 2: Crear la imagen ligera para ejecutar el backend
+FROM openjdk:17-jdk-slim
+COPY --from=build /target/SpringBootSecurityPostgresqlApplication-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-
-ARG JAR_FILE=target/SpringBootSecurityPostgresqlApplication-0.0.1-SNAPSHOT.jar
-ADD ${JAR_FILE} antlr-api.jar
-
-#RUN
-ENTRYPOINT  ["java",  "-Djava.security.egd=file:/dev/./urandom", "-jar", "/antlr-api.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
