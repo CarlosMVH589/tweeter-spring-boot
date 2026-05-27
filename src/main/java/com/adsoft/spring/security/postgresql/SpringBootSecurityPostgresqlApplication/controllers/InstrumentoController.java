@@ -55,7 +55,7 @@ public class InstrumentoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
+    @PreAuthorize("isAuthenticated()") // MODIFICADO: Permite borrar a cualquier usuario autenticado sin importar su rol
     public ResponseEntity<?> deleteInstrumento(@PathVariable Long id) {
         if (!instrumentoRepository.existsById(id)) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: El instrumento no existe."));
