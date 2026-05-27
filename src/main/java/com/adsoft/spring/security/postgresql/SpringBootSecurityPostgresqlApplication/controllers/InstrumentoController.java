@@ -17,7 +17,13 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+// MODIFICACIÓN CRÍTICA DE CORS: Habilita explícitamente DELETE, OPTIONS y la lectura de cabeceras cruzadas (allowedHeaders)
+@CrossOrigin(
+    origins = "*", 
+    methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS}, 
+    allowedHeaders = "*", 
+    maxAge = 3600
+)
 @RestController
 @RequestMapping("/api/instrumentos")
 public class InstrumentoController {
@@ -43,7 +49,6 @@ public class InstrumentoController {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el username: " + username));
 
-        // Aquí extraemos los datos limpios del DTO sin interferencias de Hibernate
         Instrumento myInstrumento = new Instrumento(
                 instrumentoRequest.getInstrumento(),
                 instrumentoRequest.getImagenUrl()
@@ -55,7 +60,7 @@ public class InstrumentoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("isAuthenticated()") // MODIFICADO: Permite borrar a cualquier usuario autenticado sin importar su rol
+    @PreAuthorize("hasRole('ADMIN')") // MODIFICACIÓN DE SEGURIDAD: Volvemos a restringir el borrado únicamente al rol Administrador
     public ResponseEntity<?> deleteInstrumento(@PathVariable Long id) {
         if (!instrumentoRepository.existsById(id)) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: El instrumento no existe."));
