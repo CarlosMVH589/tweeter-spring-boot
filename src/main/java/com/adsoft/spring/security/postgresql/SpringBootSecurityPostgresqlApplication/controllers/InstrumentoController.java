@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
-// MODIFICACIÓN CRÍTICA DE CORS: Habilita explícitamente DELETE, OPTIONS y la lectura de cabeceras cruzadas (allowedHeaders)
+// CORS totalmente abierto para aceptar peticiones de control OPTIONS y DELETE sin restricciones
 @CrossOrigin(
     origins = "*", 
     methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS}, 
@@ -60,7 +60,7 @@ public class InstrumentoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')") // MODIFICACIÓN DE SEGURIDAD: Volvemos a restringir el borrado únicamente al rol Administrador
+    @PreAuthorize("isAuthenticated()") // REVERTIDO A GENÉRICO: Cualquier usuario con sesión activa puede borrar
     public ResponseEntity<?> deleteInstrumento(@PathVariable Long id) {
         if (!instrumentoRepository.existsById(id)) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: El instrumento no existe."));
